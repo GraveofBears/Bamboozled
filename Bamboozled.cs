@@ -18,7 +18,7 @@ namespace Bamboozled
     public class Bamboozled : BaseUnityPlugin
     {
         private const string ModName = "Bamboozled";
-        private const string ModVersion = "1.0.12";
+        private const string ModVersion = "1.0.13";
         private const string ModGUID = "org.bepinex.plugins.bamboozled";
 
 
@@ -44,49 +44,69 @@ namespace Bamboozled
                 On = 1,
                 Off = 0
             }
+           
+        public static GameObject OP_Bamboo_Sapling_GameObject;
 
-
-
-
-            
-
-              public static GameObject OP_Bamboo_Sapling_GameObject;
-
-              [HarmonyPatch(typeof(ZoneSystem), nameof(ZoneSystem.ValidateVegetation))]
-              public class AddDestructiblesToZoneSystem
-              {
-                  public static void Prefix(ZoneSystem __instance)
-                  {
-                      __instance.m_vegetation.Add(new ZoneSystem.ZoneVegetation
-                      {
-                          m_biome = (Heightmap.Biome)(-1),
-                          m_groupRadius = 6f,
-                          m_groupSizeMin = 2,
-                          m_groupSizeMax = 6,
-                          m_minAltitude = 0,
-                          m_forcePlacement = true,
-                          m_max = 6,
-                          m_prefab = OP_Bamboo_Sapling_GameObject
-                      });
-                  }
-              }
-              
-
-            public void Awake()
+        public class Vegetation
+        {
+            [HarmonyPatch(typeof(ZoneSystem), nameof(ZoneSystem.Start))]
+            static class ZoneSystemStartPatch
+            {
+                static void Prefix(ZoneSystem __instance)
+                {
+                    var OP_Bamboo_Sapling_GameObject = ZNetScene.instance.GetPrefab("OP_Bamboo_Sapling");
+                    ZoneSystem.ZoneVegetation OP_Bamboo_Sapling = new()
+                    {
+                        m_name = OP_Bamboo_Sapling_GameObject.name,
+                        m_prefab = OP_Bamboo_Sapling_GameObject,
+                        m_enable = true,
+                        m_min = 1f,
+                        m_max = 6f,
+                        m_forcePlacement = true,
+                        m_scaleMin = 1f,
+                        m_scaleMax = 1f,
+                        m_randTilt = 0,
+                        m_chanceToUseGroundTilt = 0,
+                        m_biome = (Heightmap.Biome.Meadows),
+                        m_biomeArea = Heightmap.BiomeArea.Everything,
+                        m_blockCheck = true,
+                        m_minAltitude = 0f,
+                        m_maxAltitude = 1000f,
+                        m_minOceanDepth = 0,
+                        m_maxOceanDepth = 0,
+                        m_minTilt = 0,
+                        m_maxTilt = 20f,
+                        m_terrainDeltaRadius = 0,
+                        m_maxTerrainDelta = 2f,
+                        m_minTerrainDelta = 0,
+                        m_snapToWater = false,
+                        m_groundOffset = 0,
+                        m_groupRadius = 6f,
+                        m_groupSizeMin = 1,
+                        m_groupSizeMax = 6,
+                        m_inForest = true,
+                        m_forestTresholdMin = 0,
+                        m_forestTresholdMax = 1f,
+                        m_foldout = false
+                    };
+                    __instance.m_vegetation.Add(OP_Bamboo_Sapling);
+                }
+            }
+        }
+        public void Awake()
             {
 
+            serverConfigLocked = config("1 - General", "Lock Configuration", Toggle.On, "If on, the configuration is locked and can be changed by server admins only.");
+            configSync.AddLockingConfigEntry(serverConfigLocked);
 
-                serverConfigLocked = config("1 - General", "Lock Configuration", Toggle.On, "If on, the configuration is locked and can be changed by server admins only.");
-                configSync.AddLockingConfigEntry(serverConfigLocked);
-
-                BuildPiece OP_Bamboo_Sapling = new(PiecePrefabManager.RegisterAssetBundle("bamboo"), "OP_Bamboo_Sapling");
+            BuildPiece OP_Bamboo_Sapling = new(PiecePrefabManager.RegisterAssetBundle("bamboo"), "OP_Bamboo_Sapling", true, "Cultivator");
             OP_Bamboo_Sapling_GameObject = OP_Bamboo_Sapling.Prefab;
 
             //BuildPiece OP_Bamboo_Sapling = new(PiecePrefabManager.RegisterAssetBundle("bamboo"), "OP_Bamboo_Sapling", true, "Cultivator");
-            //OP_Bamboo_Sapling.Name.English("Odins Bamboo Sapling");
-            //OP_Bamboo_Sapling.Description.English("A strange tree");
-            //OP_Bamboo_Sapling.RequiredItems.Add("Wood", 1, true); ;
-            //OP_Bamboo_Sapling.Category.Add(BuildPieceCategory.Misc);
+            OP_Bamboo_Sapling.Name.English("Odins Bamboo Sapling");
+            OP_Bamboo_Sapling.Description.English("A strange tree");
+            OP_Bamboo_Sapling.RequiredItems.Add("Wood", 1, true); ;
+            OP_Bamboo_Sapling.Category.Add(BuildPieceCategory.Misc);
 
             Item OP_Bamboo_Wood = new("bamboo", "OP_Bamboo_Wood");
             OP_Bamboo_Wood.Crafting.Add(ItemManager.CraftingTable.Workbench, 10);
