@@ -21,7 +21,7 @@ namespace Bamboozled
 		private const string ModVersion = "1.0.12";
 		private const string ModGUID = "org.bepinex.plugins.bamboozled";
 
-        private static readonly ConfigSync configSync = new(ModName) { DisplayName = ModName, CurrentVersion = ModVersion, MinimumRequiredVersion = ModVersion };
+        //private static readonly ConfigSync configSync = new(ModName) { DisplayName = ModName, CurrentVersion = ModVersion, MinimumRequiredVersion = ModVersion };
 
         public static GameObject OP_Bamboo_Sapling;
 
@@ -32,14 +32,13 @@ namespace Bamboozled
 			{
 				__instance.m_vegetation.Add(new ZoneSystem.ZoneVegetation
 				{
-					m_biome = Heightmap.Biome.Meadows,
-					m_groupRadius = 6f,
+                    m_biome = (Heightmap.Biome)(-1),
+                    m_groupRadius = 6f,
 					m_groupSizeMin = 2,
 					m_groupSizeMax = 6,
 					m_minAltitude = 0,
-					m_maxAltitude =15,
 					m_forcePlacement = true,
-					m_max = 2,
+					m_max = 20,
 					m_prefab = OP_Bamboo_Sapling
 				});
 			}
