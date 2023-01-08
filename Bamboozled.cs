@@ -23,7 +23,7 @@ namespace Bamboozled
 
         //private static readonly ConfigSync configSync = new(ModName) { DisplayName = ModName, CurrentVersion = ModVersion, MinimumRequiredVersion = ModVersion };
 
-        public static GameObject OP_Bamboo_Sapling;
+        public static GameObject OP_Bamboo_Sapling_GameObject;
 
 		[HarmonyPatch(typeof(ZoneSystem), nameof(ZoneSystem.ValidateVegetation))]
 		public class AddDestructiblesToZoneSystem
@@ -39,13 +39,14 @@ namespace Bamboozled
 					m_minAltitude = 0,
 					m_forcePlacement = true,
 					m_max = 20,
-					m_prefab = OP_Bamboo_Sapling
-				});
+					m_prefab = OP_Bamboo_Sapling_GameObject
+                });
 			}
             private void Awake()
 			{
 
 				BuildPiece OP_Bamboo_Sapling = new(PiecePrefabManager.RegisterAssetBundle("bamboo"), "OP_Bamboo_Sapling");
+                OP_Bamboo_Sapling_GameObject = OP_Bamboo_Sapling.Prefab;
 
                 //BuildPiece OP_Bamboo_Sapling = new(PiecePrefabManager.RegisterAssetBundle("bamboo"), "OP_Bamboo_Sapling", true, "Cultivator");
                 //OP_Bamboo_Sapling.Name.English("Odins Bamboo Sapling");
