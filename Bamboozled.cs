@@ -11,6 +11,7 @@ using ServerSync;
 using HarmonyLib;
 
 
+
 namespace Bamboozled
 {
     [BepInPlugin(ModGUID, ModName, ModVersion)]
@@ -21,55 +22,64 @@ namespace Bamboozled
         private const string ModGUID = "org.bepinex.plugins.bamboozled";
 
 
-        private static readonly ConfigSync configSync = new(ModName) { DisplayName = ModName, CurrentVersion = ModVersion, MinimumRequiredVersion = ModVersion };
 
-        private static ConfigEntry<Toggle> serverConfigLocked = null!;
+            private static readonly ConfigSync configSync = new(ModName) { DisplayName = ModName, CurrentVersion = ModVersion, MinimumRequiredVersion = ModVersion };
 
-        private ConfigEntry<T> config<T>(string group, string name, T value, ConfigDescription description, bool synchronizedSetting = true)
-        {
-            ConfigEntry<T> configEntry = Config.Bind(group, name, value, description);
+            private static ConfigEntry<Toggle> serverConfigLocked = null!;
 
-            SyncedConfigEntry<T> syncedConfigEntry = configSync.AddConfigEntry(configEntry);
-            syncedConfigEntry.SynchronizedConfig = synchronizedSetting;
-
-            return configEntry;
-        }
-
-        private ConfigEntry<T> config<T>(string group, string name, T value, string description, bool synchronizedSetting = true) => config(group, name, value, new ConfigDescription(description), synchronizedSetting);
-
-        private enum Toggle
-        {
-            On = 1,
-            Off = 0
-        }
-
-
-        public static GameObject OP_Bamboo_Sapling_GameObject;
-
-        [HarmonyPatch(typeof(ZoneSystem), nameof(ZoneSystem.ValidateVegetation))]
-        public class AddDestructiblesToZoneSystem
-        {
-            public static void Prefix(ZoneSystem __instance)
+            private ConfigEntry<T> config<T>(string group, string name, T value, ConfigDescription description, bool synchronizedSetting = true)
             {
-                __instance.m_vegetation.Add(new ZoneSystem.ZoneVegetation
-                {
-                    m_biome = (Heightmap.Biome)(-1),
-                    m_groupRadius = 6f,
-                    m_groupSizeMin = 2,
-                    m_groupSizeMax = 6,
-                    m_minAltitude = 0,
-                    m_forcePlacement = true,
-                    m_max = 6,
-                    m_prefab = OP_Bamboo_Sapling_GameObject
-                });
-            }
-        }
-        private void Awake()
-        {
-            serverConfigLocked = config("1 - General", "Lock Configuration", Toggle.On, "If on, the configuration is locked and can be changed by server admins only.");
-            configSync.AddLockingConfigEntry(serverConfigLocked);
+                ConfigEntry<T> configEntry = Config.Bind(group, name, value, description);
 
-            BuildPiece OP_Bamboo_Sapling = new(PiecePrefabManager.RegisterAssetBundle("bamboo"), "OP_Bamboo_Sapling");
+                SyncedConfigEntry<T> syncedConfigEntry = configSync.AddConfigEntry(configEntry);
+                syncedConfigEntry.SynchronizedConfig = synchronizedSetting;
+
+                return configEntry;
+            }
+
+            private ConfigEntry<T> config<T>(string group, string name, T value, string description, bool synchronizedSetting = true) => config(group, name, value, new ConfigDescription(description), synchronizedSetting);
+
+            private enum Toggle
+            {
+                On = 1,
+                Off = 0
+            }
+
+
+
+
+            
+
+              public static GameObject OP_Bamboo_Sapling_GameObject;
+
+              [HarmonyPatch(typeof(ZoneSystem), nameof(ZoneSystem.ValidateVegetation))]
+              public class AddDestructiblesToZoneSystem
+              {
+                  public static void Prefix(ZoneSystem __instance)
+                  {
+                      __instance.m_vegetation.Add(new ZoneSystem.ZoneVegetation
+                      {
+                          m_biome = (Heightmap.Biome)(-1),
+                          m_groupRadius = 6f,
+                          m_groupSizeMin = 2,
+                          m_groupSizeMax = 6,
+                          m_minAltitude = 0,
+                          m_forcePlacement = true,
+                          m_max = 6,
+                          m_prefab = OP_Bamboo_Sapling_GameObject
+                      });
+                  }
+              }
+              
+
+            public void Awake()
+            {
+
+
+                serverConfigLocked = config("1 - General", "Lock Configuration", Toggle.On, "If on, the configuration is locked and can be changed by server admins only.");
+                configSync.AddLockingConfigEntry(serverConfigLocked);
+
+                BuildPiece OP_Bamboo_Sapling = new(PiecePrefabManager.RegisterAssetBundle("bamboo"), "OP_Bamboo_Sapling");
             OP_Bamboo_Sapling_GameObject = OP_Bamboo_Sapling.Prefab;
 
             //BuildPiece OP_Bamboo_Sapling = new(PiecePrefabManager.RegisterAssetBundle("bamboo"), "OP_Bamboo_Sapling", true, "Cultivator");
@@ -652,4 +662,4 @@ namespace Bamboozled
 
         }
     }
-}}
+}
