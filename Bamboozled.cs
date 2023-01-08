@@ -46,14 +46,15 @@ namespace Bamboozled
             private void Awake()
 			{
 
+				BuildPiece OP_Bamboo_Sapling = new(PiecePrefabManager.RegisterAssetBundle("bamboo"), "OP_Bamboo_Sapling");
 
-                BuildPiece OP_Bamboo_Sapling = new(PiecePrefabManager.RegisterAssetBundle("bamboo"), "OP_Bamboo_Sapling", true, "Cultivator");
-				OP_Bamboo_Sapling.Name.English("Odins Bamboo Sapling");
-				OP_Bamboo_Sapling.Description.English("A strange tree");
-				OP_Bamboo_Sapling.RequiredItems.Add("Wood", 1, true); ;
-				OP_Bamboo_Sapling.Category.Add(BuildPieceCategory.Misc);
+                //BuildPiece OP_Bamboo_Sapling = new(PiecePrefabManager.RegisterAssetBundle("bamboo"), "OP_Bamboo_Sapling", true, "Cultivator");
+                //OP_Bamboo_Sapling.Name.English("Odins Bamboo Sapling");
+                //OP_Bamboo_Sapling.Description.English("A strange tree");
+                //OP_Bamboo_Sapling.RequiredItems.Add("Wood", 1, true); ;
+                //OP_Bamboo_Sapling.Category.Add(BuildPieceCategory.Misc);
 
-				Item OP_Bamboo_Wood = new("bamboo", "OP_Bamboo_Wood");
+                Item OP_Bamboo_Wood = new("bamboo", "OP_Bamboo_Wood");
 				OP_Bamboo_Wood.Crafting.Add(ItemManager.CraftingTable.Workbench, 10);
 				OP_Bamboo_Wood.RequiredItems.Add("SwordCheat", 1);
 				OP_Bamboo_Wood.CraftAmount = 1;
