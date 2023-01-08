@@ -621,8 +621,11 @@ namespace Bamboozled
 				//totem
 				GameObject OP_Bamboo_Build_Totem = ItemManager.PrefabManager.RegisterPrefab("bamboo", "OP_Bamboo_Build_Totem");
 
+                Assembly assembly = Assembly.GetExecutingAssembly();
+                Harmony harmony = new(ModGUID);
+                harmony.PatchAll(assembly);
 
-			}
+            }
 		}
 	}
 }
