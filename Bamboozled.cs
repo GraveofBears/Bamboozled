@@ -11,7 +11,6 @@ using ServerSync;
 using HarmonyLib;
 
 
-
 namespace Bamboozled
 {
     [BepInPlugin(ModGUID, ModName, ModVersion)]
@@ -43,7 +42,6 @@ namespace Bamboozled
             On = 1,
             Off = 0
         }
-
 
         public static GameObject OP_Bamboo_Sapling_GameObject;
 
