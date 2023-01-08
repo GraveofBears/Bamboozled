@@ -14,14 +14,36 @@ using HarmonyLib;
 
 namespace Bamboozled
 {
-	[BepInPlugin(ModGUID, ModName, ModVersion)]
-	public class Bamboozled : BaseUnityPlugin
-	{
-		private const string ModName = "Bamboozled";
-		private const string ModVersion = "1.0.12";
-		private const string ModGUID = "org.bepinex.plugins.bamboozled";
+    [BepInPlugin(ModGUID, ModName, ModVersion)]
+    public class Bamboozled : BaseUnityPlugin
+    {
+        private const string ModName = "Bamboozled";
+        private const string ModVersion = "1.0.12";
+        private const string ModGUID = "org.bepinex.plugins.bamboozled";
 
-        //private static readonly ConfigSync configSync = new(ModName) { DisplayName = ModName, CurrentVersion = ModVersion, MinimumRequiredVersion = ModVersion };
+
+        private static readonly ConfigSync configSync = new(ModName) { DisplayName = ModName, CurrentVersion = ModVersion, MinimumRequiredVersion = ModVersion };
+
+        private static ConfigEntry<Toggle> serverConfigLocked = null!;
+
+        private ConfigEntry<T> config<T>(string group, string name, T value, ConfigDescription description, bool synchronizedSetting = true)
+        {
+            ConfigEntry<T> configEntry = Config.Bind(group, name, value, description);
+
+            SyncedConfigEntry<T> syncedConfigEntry = configSync.AddConfigEntry(configEntry);
+            syncedConfigEntry.SynchronizedConfig = synchronizedSetting;
+
+            return configEntry;
+        }
+
+        private ConfigEntry<T> config<T>(string group, string name, T value, string description, bool synchronizedSetting = true) => config(group, name, value, new ConfigDescription(description), synchronizedSetting);
+
+        private enum Toggle
+        {
+            On = 1,
+            Off = 0
+        }
+
 
         public static GameObject OP_Bamboo_Sapling_GameObject;
 
@@ -45,14 +67,14 @@ namespace Bamboozled
             private void Awake()
 			{
 
-				BuildPiece OP_Bamboo_Sapling = new(PiecePrefabManager.RegisterAssetBundle("bamboo"), "OP_Bamboo_Sapling");
+				BuildPiece OP_Bamboo_Sapling = new(PiecePrefabManager.RegisterAssetBundle("bamboo"), "OP_Bamboo_Sapling", true, "Cultivator");
                 OP_Bamboo_Sapling_GameObject = OP_Bamboo_Sapling.Prefab;
 
                 //BuildPiece OP_Bamboo_Sapling = new(PiecePrefabManager.RegisterAssetBundle("bamboo"), "OP_Bamboo_Sapling", true, "Cultivator");
-                //OP_Bamboo_Sapling.Name.English("Odins Bamboo Sapling");
-                //OP_Bamboo_Sapling.Description.English("A strange tree");
-                //OP_Bamboo_Sapling.RequiredItems.Add("Wood", 1, true); ;
-                //OP_Bamboo_Sapling.Category.Add(BuildPieceCategory.Misc);
+                OP_Bamboo_Sapling.Name.English("Odins Bamboo Sapling");
+                OP_Bamboo_Sapling.Description.English("A strange tree");
+                OP_Bamboo_Sapling.RequiredItems.Add("Wood", 1, true); ;
+                OP_Bamboo_Sapling.Category.Add(BuildPieceCategory.Misc);
 
                 Item OP_Bamboo_Wood = new("bamboo", "OP_Bamboo_Wood");
 				OP_Bamboo_Wood.Crafting.Add(ItemManager.CraftingTable.Workbench, 10);
