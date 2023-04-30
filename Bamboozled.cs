@@ -96,7 +96,7 @@ namespace Bamboozled
                 }
             }
         }
-        [HarmonyPatch(typeof(Sign), nameof(Sign.Awake))]
+       /* [HarmonyPatch(typeof(Sign), nameof(Sign.Awake))]
         static class SignAwakePatch
         {
             static void Prefix(Sign __instance)
@@ -143,6 +143,7 @@ namespace Bamboozled
                 }
             }
         }
+       */
         public void Awake()
             {
 
