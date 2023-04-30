@@ -9,7 +9,8 @@ using UnityEngine;
 using PieceManager;
 using ServerSync;
 using HarmonyLib;
-using Unity.TextMeshPro;
+using TMPro;
+using UnityEngine.UI;
 
 
 
@@ -20,7 +21,7 @@ namespace Bamboozled
     public class Bamboozled : BaseUnityPlugin
     {
         private const string ModName = "Bamboozled";
-        private const string ModVersion = "1.0.16";
+        private const string ModVersion = "1.0.17";
         private const string ModGUID = "org.bepinex.plugins.bamboozled";
 
 
